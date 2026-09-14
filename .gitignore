@@ -20,4 +20,4 @@ __pycache__/
 .env
 
 # 기타
-*.logg
+*.log
