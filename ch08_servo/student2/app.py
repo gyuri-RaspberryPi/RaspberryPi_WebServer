@@ -2,8 +2,10 @@ from flask import Flask, render_template, request, jsonify
 import RPi.GPIO as GPIO
 from time import sleep
 import config
+from model.servo_db import ServoDB
 
 app = Flask(__name__)
+servo_db = ServoDB()
 SERVO = config.SERVO_PIN
 
 GPIO.setwarnings(False)
@@ -29,6 +31,7 @@ def api_angle():
     if angle<0 or angle >180:
         return jsonify({"message": "0 ~ 180 사이만 가능"}), 400
     set_angle(angle)
+    servo_db.add(SERVO, angle)
     return jsonify({f"message": "{angle}도로 움직임"})
 
 if __name__ == "__main__":
