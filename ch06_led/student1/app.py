@@ -1,5 +1,5 @@
 from model.led_db import LedDB  
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 import RPi.GPIO as GPIO
 import config
 
@@ -15,8 +15,8 @@ GPIO.setup(LED, GPIO.OUT, initial=GPIO.LOW)
 
 @app.route("/")
 def home():
-    return render_template("index.html")
-
+    records = led_db.get_all()
+    return render_template("index.html", records=records)
 
 @app.route("/on", methods=["POST"])
 def led_on():
@@ -39,6 +39,11 @@ def led_off():
     except:
         return "fail", 500
 
+
+@app.route("/status", methods=["GET"])
+def led_status():
+    state = GPIO.input(LED)
+    return {"is_on": state == GPIO.HIGH}
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=config.PORT)

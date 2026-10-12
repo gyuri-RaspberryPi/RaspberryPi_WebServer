@@ -25,3 +25,15 @@ class LedDB:
             conn.commit()
         finally:
             conn.close()
+
+    def get_all(self):
+        conn = get_connection()
+        try:
+            cur = conn.cursor()
+            cur.execute(
+                "SELECT id, pin, is_on, created_at "
+                "FROM led_record ORDER BY id DESC"
+            )
+            return cur.fetchall()
+        finally:
+            conn.close()
