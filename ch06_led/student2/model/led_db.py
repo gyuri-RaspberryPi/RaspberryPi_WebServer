@@ -26,3 +26,12 @@ class LedDB:
             conn.commit()
         finally:
             conn.close()
+
+    def get(self, pin):
+        conn = get_connection()
+        try:
+            cur = conn.cursor()
+            cur.execute("select * from led_record order by id desc limit 10")
+            return cur.fetchall()
+        finally:
+            conn.close()
