@@ -32,7 +32,7 @@ def api_angle():
         return jsonify({"message": "0 ~ 180 사이만 가능"}), 400
     set_angle(angle)
     servo_db.add(SERVO, angle)
-    return jsonify({f"message": "{angle}도로 움직임"})
+    return jsonify({"message": f"{angle}도로 움직임"})
 
 if __name__ == "__main__":
     app.run(host = "0.0.0.0", port=config.PORT)

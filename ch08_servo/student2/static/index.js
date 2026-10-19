@@ -20,3 +20,8 @@ document.getElementById("setAngle").addEventListener("click",async function (){
 	}
 	message.textContent = result.message;
 });
+
+function setAnglePreset(val) {
+    document.getElementById("angle").value = val;
+    document.getElementById("setAngle").click();
+}
