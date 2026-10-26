@@ -3,3 +3,5 @@ pymysql
 cryptography
 python-dotenv
 rpi-lgpio
+requests
+adafruit-circuitpython-dht

@@ -9,12 +9,72 @@
 <body>
     <div class="container text-center mt-5">
         <h2>LED ON / OFF</h2>
-        <div>
-            <img id="led" src="/static/off.png" width="300" alt="led">
+        <div class="row mt-4">
+            <!-- Red LED -->
+            <div class="col">
+                <img id="red" src="{{ url_for('static', filename='red_' ~ ('on' if is_on['red'] else 'off') ~ '.png') }}" width="100" alt="빨강">
+                <div class="mt-2">
+                    <input class="btn btn-danger" id="red-on" type="button" value="ON" onclick="control('red', 'on')">
+                    <input class="btn btn-outline-danger" id="red-off" type="button" value="OFF" onclick="control('red', 'off')">
+                </div>
+            </div>
+            <!-- Green LED -->
+            <div class="col">
+                <img id="green" src="{{ url_for('static', filename='green_' ~ ('on' if is_on['green'] else 'off') ~ '.png') }}" width="100" alt="초록">
+                <div class="mt-2">
+                    <input class="btn btn-success" id="green-on" type="button" value="ON" onclick="control('green', 'on')">
+                    <input class="btn btn-outline-success" id="green-off" type="button" value="OFF" onclick="control('green', 'off')">
+                </div>
+            </div>
+            <!-- Blue LED -->
+            <div class="col">
+                <img id="blue" src="{{ url_for('static', filename='blue_' ~ ('on' if is_on['blue'] else 'off') ~ '.png') }}" width="100" alt="파랑">
+                <div class="mt-2">
+                    <input class="btn btn-primary" id="blue-on" type="button" value="ON" onclick="control('blue', 'on')">
+                    <input class="btn btn-outline-primary" id="blue-off" type="button" value="OFF" onclick="control('blue', 'off')">
+                </div>
+            </div>
         </div>
-        <input class="btn btn-primary" id="on" type="button" value="ON">
-        <input class="btn btn-success" id="off" type="button" value="OFF">
+
+        <h3 class="mt-5">최근 기록</h3>
+        <table class="table mt-3">
+            <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>상태</th>
+                    <th>시각</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in records %}
+                <tr>
+                    <td>{{ r.id if r.id is defined else r[0] }}</td>
+                    <td>
+                        {% set p = r.pin if r.pin is defined else r[1] %}
+                        {% set s = r.is_on if r.is_on is defined else r[2] %}
+                        
+                        {% if p == 12or p == 'red' %}
+                            빨강 {{ 'ON' if s else 'OFF' }}
+                        {% elif p == 18 or p == 'green' %}
+                            초록 {{ 'ON' if s else 'OFF' }}
+                        {% elif p == 22 or p == 'blue' %}
+                            파랑 {{ 'ON' if s else 'OFF' }}
+                        {% else %}
+                            핀 {{ p }} {{ 'ON' if s else 'OFF' }}
+                        {% endif %}
+                    </td>
+                    <td>{{ r.created_at if r.created_at is defined else r[3] }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3">저장된 기록이 없습니다.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
+
+    <!-- JS 파일 연동 -->
     <script src="{{ url_for('static', filename='index.js') }}"></script>
 </body>
 </html>
